@@ -1,126 +1,115 @@
-create table if not exists tokens (
-token text primary key,
-is_active boolean not null,
-
-constraint CH_token CHECK (token ~ '^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$')
+CREATE TABLE IF NOT EXISTS tokens (
+    token TEXT PRIMARY KEY,
+    is_active BOOLEAN NOT NULL,
+    CONSTRAINT ch_token CHECK (token ~ '^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$')
 );
 
-create table if not exists user_info (
-user_info_id serial primary key,
-first_name varchar(15) not null,
-middle_name varchar(15) not null,
-phone_number varchar(12) not null unique,
-email varchar(20) not null unique,
-
-constraint CK_phone_number check (phone_number ~ '^\+[0-9]{11}'),
-constraint CK_email check(email ~ '^(?!.*\.\.)^(?!.*\_\_)(?!^[._])(?!.*[._]$)[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+CREATE TABLE IF NOT EXISTS user_info (
+    user_info_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(15) NOT NULL,
+    middle_name VARCHAR(15) NOT NULL,
+    phone_number VARCHAR(12) NOT NULL UNIQUE,
+    email VARCHAR(20) NOT NULL UNIQUE,
+    CONSTRAINT ck_phone_number CHECK (phone_number ~ '^\+[0-9]{11}'),
+    CONSTRAINT ck_email CHECK (email ~ '^(?!.*\.\.)(?!.*\_\_)(?!^[._])(?!.*[._]$)[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
 );
 
-create table if not exists roles (
-role_id serial primary key,
-role_name varchar(20) not null unique
+CREATE TABLE IF NOT EXISTS roles (
+    role_id SERIAL PRIMARY KEY,
+    role_name VARCHAR(20) NOT NULL UNIQUE
 );
 
-create table if not exists guests (
-guest_id serial primary key,
-user_info_id integer not null,
-foreign key (user_info_id)  references user_info(user_info_id)
+CREATE TABLE IF NOT EXISTS guests (
+    guest_id SERIAL PRIMARY KEY,
+    user_info_id INTEGER NOT NULL,
+    FOREIGN KEY (user_info_id) REFERENCES user_info(user_info_id)
 );
 
-create table if not exists users (
-user_id serial primary key,
-user_info_id integer not null unique,
-password varchar(15) not null,
-role_id integer not null,
-foreign key (user_info_id) references user_info(user_info_id),
-foreign key (role_id) references roles(role_id)
+CREATE TABLE IF NOT EXISTS users (
+    user_id SERIAL PRIMARY KEY,
+    user_info_id INTEGER NOT NULL UNIQUE,
+    password VARCHAR(15) NOT NULL,
+    role_id INTEGER NOT NULL,
+    FOREIGN KEY (user_info_id) REFERENCES user_info(user_info_id),
+    FOREIGN KEY (role_id) REFERENCES roles(role_id)
 );
 
-create table if not exists barber_grades (
-barber_grade_id serial primary key,
-grade_name varchar(20) not null unique
+CREATE TABLE IF NOT EXISTS barber_grades (
+    barber_grade_id SERIAL PRIMARY KEY,
+    grade_name VARCHAR(20) NOT NULL UNIQUE
 );
 
-create table if not exists barbers (
-barber_id integer primary key,
-barber_info varchar(1000),
-barber_grade_id integer not null,
-
-foreign key (barber_grade_id) references barber_grades(barber_grade_id),
-foreign key (barber_id) references users(user_id)
+CREATE TABLE IF NOT EXISTS barbers (
+    barber_id INTEGER PRIMARY KEY,
+    barber_info VARCHAR(1000),
+    barber_grade_id INTEGER NOT NULL,
+    FOREIGN KEY (barber_grade_id) REFERENCES barber_grades(barber_grade_id),
+    FOREIGN KEY (barber_id) REFERENCES users(user_id)
 );
 
-create table if not exists moderator (
-moderator_id integer primary key,
-foreign key(moderator_id) references users(user_id)
+CREATE TABLE IF NOT EXISTS moderators (
+    moderator_id INTEGER PRIMARY KEY,
+    FOREIGN KEY (moderator_id) REFERENCES users(user_id)
 );
 
-create table if not exists branches (
-branch_id serial primary key,
-abress varchar(40) not null unique,
-work_start_time time not null,
-work_end_time time not null,
-latitude decimal(9,6) not null,
-longitude decimal(9,6) not null
+CREATE TABLE IF NOT EXISTS branches (
+    branch_id SERIAL PRIMARY KEY,
+    address VARCHAR(40) NOT NULL UNIQUE,
+    work_start_time TIME NOT NULL,
+    work_end_time TIME NOT NULL,
+    latitude DECIMAL(9,6) NOT NULL,
+    longitude DECIMAL(9,6) NOT NULL
 );
 
-
-create table if not exists shifts (
-shift_id serial primary key,
-shift_date date not null,
-barber_id integer not null,
-work_start_time time not null,
-work_end_time time not null,
-branch_id integer not null,
-
-foreign key (barber_id) references barbers(barber_id),
-foreign key (branch_id) references branches(branch_id)
+CREATE TABLE IF NOT EXISTS shifts (
+    shift_id SERIAL PRIMARY KEY,
+    shift_date DATE NOT NULL,
+    barber_id INTEGER NOT NULL,
+    work_start_time TIME NOT NULL,
+    work_end_time TIME NOT NULL,
+    branch_id INTEGER NOT NULL,
+    FOREIGN KEY (barber_id) REFERENCES barbers(barber_id),
+    FOREIGN KEY (branch_id) REFERENCES branches(branch_id)
 );
 
-create table if not exists appointment_statuses (
-appointment_status_id serial primary key,
-appointment_status varchar(15) not null unique
+CREATE TABLE IF NOT EXISTS appointment_statuses (
+    appointment_status_id SERIAL PRIMARY KEY,
+    appointment_status_name VARCHAR(30) NOT NULL UNIQUE
 );
 
-
-create table if not exists appointments (
-appointment_id serial primary key,
-guest_id integer,
-user_id integer,
-shift_id integer not null,
-appointment_status_id integer not null,
-appointment_time time not null,
-
-foreign key (guest_id) references guests(guest_id),
-foreign key (user_id) references users(user_id),
-foreign key (shift_id) references shifts(shift_id),
-
-constraint  CH_user_guest check (
-(guest_id is null and user_id is not null )  or
-(user_id is null and guest_id is not null))
+CREATE TABLE IF NOT EXISTS appointments (
+    appointment_id SERIAL PRIMARY KEY,
+    guest_id INTEGER,
+    user_id INTEGER,
+    shift_id INTEGER NOT NULL,
+    appointment_status_id INTEGER NOT NULL,
+    appointment_time TIME NOT NULL,
+    FOREIGN KEY (guest_id) REFERENCES guests(guest_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (shift_id) REFERENCES shifts(shift_id),
+    CONSTRAINT ch_user_guest CHECK (
+        (guest_id IS NULL AND user_id IS NOT NULL) OR
+        (user_id IS NULL AND guest_id IS NOT NULL)
+    )
 );
 
-create table if not exists services (
-service_id serial primary key,
-service_name varchar(25) not null unique,
-duration smallint not null
+CREATE TABLE IF NOT EXISTS services (
+    service_id SERIAL PRIMARY KEY,
+    service_name VARCHAR(25) NOT NULL UNIQUE,
+    duration SMALLINT NOT NULL
 );
 
-create table if not exists appointment_service (
-service_id integer not null,
-appointment_id integer not null,
-
-foreign key (service_id) references services(service_id),
-foreign key (appointment_id) references appointments(appointment_id),
-
-primary  key(service_id,appointment_id)
+CREATE TABLE IF NOT EXISTS appointment_services (
+    service_id INTEGER NOT NULL,
+    appointment_id INTEGER NOT NULL,
+    FOREIGN KEY (service_id) REFERENCES services(service_id),
+    FOREIGN KEY (appointment_id) REFERENCES appointments(appointment_id),
+    PRIMARY KEY (service_id, appointment_id)
 );
 
-create table if not exists service_cost (
-service_id integer,
-barber_grade_id integer,
-cost money not null,
-
-primary key(service_id, barber_grade_id)
-)
-
+CREATE TABLE IF NOT EXISTS service_costs (
+    service_id INTEGER,
+    barber_grade_id INTEGER,
+    cost MONEY NOT NULL,
+    PRIMARY KEY (service_id, barber_grade_id)
+);
