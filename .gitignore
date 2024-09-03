@@ -76,3 +76,6 @@ nb-configuration.xml
 # Draw IO
 *.dtmp
 *.bkp
+
+#Spring
+private_data.properties
