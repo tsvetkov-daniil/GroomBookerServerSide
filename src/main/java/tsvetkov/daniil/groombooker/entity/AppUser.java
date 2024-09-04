@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class User {
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
@@ -13,7 +13,7 @@ public class User {
     @OneToOne
     @JoinColumn
     private UserInfo userInfoId;
-    private String Password;
+    private String password;
 
     @ManyToOne
     @JoinColumn

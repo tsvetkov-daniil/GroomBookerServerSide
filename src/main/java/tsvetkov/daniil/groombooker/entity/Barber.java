@@ -18,6 +18,6 @@ public class Barber {
     private BarberGrade barberGradeId;
     @OneToOne
     @JoinColumn
-    private User userId;
+    private AppUser userId;
 }
 

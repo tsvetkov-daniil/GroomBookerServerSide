@@ -13,6 +13,6 @@ public class Moderator {
 
     @OneToOne
     @JoinColumn
-    private User userId;
+    private AppUser userId;
 }
 

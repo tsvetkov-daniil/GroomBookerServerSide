@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS public.guests (
     FOREIGN KEY (user_info_id) REFERENCES user_info(user_info_id)
 );
 
-CREATE TABLE IF NOT EXISTS public.users (
+CREATE TABLE IF NOT EXISTS public.app_users (
     user_id SERIAL PRIMARY KEY,
     user_info_id INTEGER NOT NULL UNIQUE,
     password VARCHAR(15) NOT NULL,
@@ -44,12 +44,12 @@ CREATE TABLE IF NOT EXISTS public.barbers (
     barber_info VARCHAR(1000),
     barber_grade_id INTEGER NOT NULL,
     FOREIGN KEY (barber_grade_id) REFERENCES barber_grades(barber_grade_id),
-    FOREIGN KEY (barber_id) REFERENCES users(user_id)
+    FOREIGN KEY (barber_id) REFERENCES app_users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.moderators (
     moderator_id INTEGER PRIMARY KEY,
-    FOREIGN KEY (moderator_id) REFERENCES users(user_id)
+    FOREIGN KEY (moderator_id) REFERENCES app_users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.branches (
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS public.appointments (
     appointment_status_id INTEGER NOT NULL,
     appointment_time TIME NOT NULL,
     FOREIGN KEY (guest_id) REFERENCES guests(guest_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_id) REFERENCES app_users(user_id),
     FOREIGN KEY (shift_id) REFERENCES shifts(shift_id),
     CONSTRAINT ch_user_guest CHECK (
         (guest_id IS NULL AND user_id IS NOT NULL) OR
