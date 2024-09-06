@@ -3,7 +3,7 @@ package tsvetkov.daniil.groombooker.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -30,7 +30,7 @@ public class Appointment {
     @JoinColumn
     private AppointmentStatus appointmentStatus;
 
-    private Time appointmentTime;
+    private LocalDateTime appointmentTime;
 
     @ManyToMany
     @JoinTable(

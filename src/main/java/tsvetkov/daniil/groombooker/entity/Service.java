@@ -1,12 +1,10 @@
 package tsvetkov.daniil.groombooker.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.Set;
 
 @Data
 @Entity
@@ -20,6 +18,10 @@ public class Service {
 
     private Short duration;
 
-    @ManyToMany(mappedBy = "services")
-    private Set<Appointment> appointments;
+    //TODO Добавить коллекцию для услуги грейд-цена
+//    @ElementCollection
+//    @CollectionTable(name = "service_prices")
+//    @MapKeyColumn(name = "barber_grade")
+//    @Column(name = "price")
+//    private Map<BarberGrade, Double> barberGradePrices = new HashMap<>();
 }
