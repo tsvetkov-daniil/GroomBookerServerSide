@@ -6,4 +6,5 @@ import tsvetkov.daniil.groombooker.entity.UserInfo;
 
 @Repository
 public interface UserInfoRepository extends JpaRepository<UserInfo, Integer> {
+
 }

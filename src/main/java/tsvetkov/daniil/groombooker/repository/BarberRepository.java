@@ -6,4 +6,6 @@ import tsvetkov.daniil.groombooker.entity.Barber;
 
 @Repository
 public interface BarberRepository extends JpaRepository<Barber,Integer> {
+
+
 }
