@@ -5,14 +5,16 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "moderators")
 public class Moderator {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer moderatorId;
+    @Column(name = "moderator_id")
+    private Integer id;
 
     @OneToOne
-    @JoinColumn
+    @MapsId
+    @JoinColumn(name = "moderator_id")
     private AppUser userId;
 }
 

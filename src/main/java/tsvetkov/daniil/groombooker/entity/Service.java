@@ -1,20 +1,20 @@
 package tsvetkov.daniil.groombooker.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "services")
 public class Service {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer serviceId;
+    @Column(name = "service_id")
+    private Integer id;
 
-    private String serviceName;
+    @Column(name = "service_name")
+    private String name;
 
     private Short duration;
 

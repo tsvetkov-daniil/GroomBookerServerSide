@@ -5,14 +5,16 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "guests")
 public class Guest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer guestId;
+    @Column(name = "guest_id")
+    private Integer id;
     @OneToOne
-    @JoinColumn
-    private UserInfo userInfoId;
+    @JoinColumn(name = "user_info_id")
+    private UserInfo userInfo;
 }
 
 

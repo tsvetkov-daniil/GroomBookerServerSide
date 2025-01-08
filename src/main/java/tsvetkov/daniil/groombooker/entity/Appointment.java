@@ -8,11 +8,13 @@ import java.util.Set;
 
 @Data
 @Entity
+@Table(name = "appointments")
 public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer appointmentId;
+    @Column(name = "appointment_id")
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "guest_id")
@@ -27,14 +29,15 @@ public class Appointment {
     private Shift shift;
 
     @ManyToOne
-    @JoinColumn
-    private AppointmentStatus appointmentStatus;
+    @JoinColumn(name = "appointment_status_id")
+    private AppointmentStatus status;
 
-    private LocalDateTime appointmentTime;
+    @Column(name = "appointment_time")
+    private LocalDateTime time;
 
     @ManyToMany
     @JoinTable(
-            name = "appointments_services",
+            name = "appointment_services",
             joinColumns = @JoinColumn(name = "appointment_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )

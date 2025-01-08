@@ -2,20 +2,19 @@ package tsvetkov.daniil.groombooker.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
 @Data
+@Table(name = "shifts")
 public class Shift {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer shiftId;
+    @Column(name = "shift_id")
+    private Integer id;
 
     private LocalDate shiftDate;
 
@@ -24,11 +23,11 @@ public class Shift {
     private LocalTime workEndTime;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "barber_id")
     private Barber barberId;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "branch_id")
     private Branch branchId;
 }
 

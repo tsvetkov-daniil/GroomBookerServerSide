@@ -2,18 +2,18 @@ package tsvetkov.daniil.groombooker.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @Entity
+@Table(name = "barber_grades")
 public class BarberGrade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long barberGradeId;
+    @Column(name = "barber_grade_id")
+    private Integer id;
 
-    private String gradeName;
+    @Column(name = "grade_name")
+    private String name;
 }
 

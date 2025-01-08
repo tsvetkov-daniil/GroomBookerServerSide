@@ -7,10 +7,10 @@ import lombok.Data;
 @Data
 public class ServiceCostId {
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "service_id")
     private Service serviceId;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "barber_grade_id")
     private BarberGrade barberGradeId;
 }

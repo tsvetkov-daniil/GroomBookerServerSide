@@ -6,12 +6,15 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "appointment_statuses")
 public class AppointmentStatus {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer appointmentStatusId;
+    @Column(name = "appointment_status_id")
+    private Integer id;
 
-    private String appointmentStatusName;
+    @Column(name = "appointment_status_name")
+    private String name;
 }
 

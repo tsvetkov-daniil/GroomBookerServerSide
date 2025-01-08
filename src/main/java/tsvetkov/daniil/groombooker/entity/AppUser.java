@@ -2,20 +2,30 @@ package tsvetkov.daniil.groombooker.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Table(name = "app_users")
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    @Column(name = "user_id")
+    private int id;
 
     @OneToOne
-    @JoinColumn
-    private UserInfo userInfoId;
+    @NonNull
+    @JoinColumn(name = "user_info_id")
+    private UserInfo userInfo;
+    @NonNull
     private String password;
 
     @ManyToOne
-    @JoinColumn
-    private Role roleId;
+    @JoinColumn(name = "role_id")
+    private Role role;
+
 }

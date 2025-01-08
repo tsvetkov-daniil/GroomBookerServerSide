@@ -2,9 +2,9 @@ package tsvetkov.daniil.groombooker.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "branches")
@@ -13,13 +13,14 @@ public class Branch {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long branchId;
+    @Column(name = "branch_id")
+    private Integer id;
 
     private String address;
 
-    private LocalDateTime workStartTime;
+    private LocalTime workStartTime;
 
-    private LocalDateTime workEndTime;
+    private LocalTime workEndTime;
 
     private BigDecimal latitude;
 

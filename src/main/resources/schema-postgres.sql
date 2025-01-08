@@ -7,16 +7,17 @@ CREATE TABLE IF NOT EXISTS public.tokens (
 CREATE TABLE IF NOT EXISTS public.user_info (
     user_info_id SERIAL PRIMARY KEY,
     first_name VARCHAR(15) NOT NULL,
-    middle_name VARCHAR(15) NOT NULL,
+    last_name VARCHAR(15) NOT NULL,
     phone_number VARCHAR(12) NOT NULL UNIQUE,
-    email VARCHAR(20) NOT NULL UNIQUE,
+    -- TODO email 200???????
+    email VARCHAR(200) NOT NULL UNIQUE,
     CONSTRAINT ck_phone_number CHECK (phone_number ~ '^\+[0-9]{11}'),
     CONSTRAINT ck_email CHECK (email ~ '^(?!.*\.\.)(?!.*\_\_)(?!^[._])(?!.*[._]$)[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
 );
 
 CREATE TABLE IF NOT EXISTS public.roles (
     role_id SERIAL PRIMARY KEY,
-    role_name VARCHAR(20) NOT NULL
+    role_name VARCHAR(20) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS public.guests (
@@ -83,7 +84,7 @@ CREATE TABLE IF NOT EXISTS public.appointments (
     user_id INTEGER,
     shift_id INTEGER NOT NULL,
     appointment_status_id INTEGER NOT NULL,
-    appointment_time TIME NOT NULL,
+    appointment_time TIMESTAMP(0) NOT NULL,
     FOREIGN KEY (guest_id) REFERENCES guests(guest_id),
     FOREIGN KEY (user_id) REFERENCES app_users(user_id),
     FOREIGN KEY (shift_id) REFERENCES shifts(shift_id),
