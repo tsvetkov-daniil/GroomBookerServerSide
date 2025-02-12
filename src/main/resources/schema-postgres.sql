@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS public.guests (
 CREATE TABLE IF NOT EXISTS public.app_users (
     user_id SERIAL PRIMARY KEY,
     user_info_id INTEGER NOT NULL UNIQUE,
-    password VARCHAR(15) NOT NULL,
+    password VARCHAR(35) NOT NULL,
     role_id INTEGER NOT NULL,
     FOREIGN KEY (user_info_id) REFERENCES user_info(user_info_id),
     FOREIGN KEY (role_id) REFERENCES roles(role_id)

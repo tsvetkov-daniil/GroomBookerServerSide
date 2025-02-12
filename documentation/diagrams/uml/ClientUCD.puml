@@ -1,0 +1,31 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+actor Client
+
+rectangle "Barbershop Booking System" {
+    usecase (View My Appointments) as v_appointments
+    usecase (Cancel Appointment) as c_appointment
+    usecase (Book Service) as book_service
+    usecase (User Login) as us_log
+    usecase (User Registration) as us_reg
+    usecase (View Branches) as v_branches
+    usecase (View Services) as v_services
+    usecase (View available \n appointment slots) as v_slots
+
+    Client -- book_service
+    Client -- c_appointment
+    Client -- us_reg
+    Client -- v_appointments
+    Client -- us_log
+
+    c_appointment <.left. v_appointments : <<precedes>>
+    c_appointment <.left. book_service : <<precedes>>
+    book_service .down.> v_services : <<include>>
+    book_service .down.> v_branches : <<include>>
+    book_service .down.> v_slots : <<include>>
+
+
+}
+
+@enduml

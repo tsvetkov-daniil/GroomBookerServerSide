@@ -1,0 +1,84 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+
+actor Moderator
+actor Administrator
+actor Barber
+actor Client #red
+
+Moderator <|- Administrator
+Barber -|> Client
+Client <|- Moderator
+
+rectangle "Barbershop Booking System" {
+
+    usecase (Manage Appointments) as m_appointments
+    usecase (Manage Barbers) as m_barbers
+    usecase (Manage Schedule) as m_schedule
+    usecase (Manage Moderators) as m_moderators
+    usecase (Manage Barbershops) as m_barbershops
+    usecase (Manage Services) as m_services
+    usecase (View Appointments) as v_appointments
+
+    usecase (Add New Barber) as add_barber
+    usecase (Remove Barber) as r_barber
+    usecase (Edit Barber Info) as e_info_barber
+    usecase (Cancel Appointment) as c_appointment
+    usecase (Mark as Completed) as mark_completed
+    usecase (Register Walk-in) as reg_walk_in
+    usecase (Add Shift) as add_shift
+    usecase (Remove Shift) as r_shift
+    usecase (Edit Shift) as edit_shift
+    usecase (Edit Branch Info) as e_branch_info
+    usecase (Remove Branch) as r_branch
+    usecase (Add Branch) as add_branch
+    usecase (Remove Moderator) as r_moderator
+    usecase (Add Moderator) as add_moderator
+    usecase (Remove Service) as r_service
+    usecase (Add Service) as add_service
+    usecase (Edit Service) as e_service
+
+    m_barbers <|-- add_barber
+    m_barbers <|-- r_barber
+    m_barbers <|-- e_info_barber
+
+    add_barber .right.> e_info_barber  : <<precedes>>
+    add_barber .left.> r_barber  : <<precedes>>
+
+    m_schedule <|-- add_shift
+    m_schedule <|-- edit_shift
+    m_schedule <|-- r_shift
+    add_shift .right.> edit_shift : <<precedes>>
+    add_shift .left.> r_shift : <<precedes>>
+
+    m_appointments <|-- c_appointment
+    m_appointments <|-- mark_completed
+    m_appointments <|-- reg_walk_in
+
+    Moderator -- m_appointments
+    Moderator -- m_barbers
+    Moderator -- m_schedule
+    Administrator -- m_moderators
+    m_moderators <|-- r_moderator
+    m_moderators <|-- add_moderator
+    add_moderator .right.> r_moderator  : <<precedes>>
+
+    Administrator -- m_barbershops
+    Administrator -- m_services
+    m_barbershops <|-- add_branch
+    m_barbershops <|-- r_branch
+    m_barbershops <|-- e_branch_info
+    m_services <|-- add_service
+    m_services <|-- e_service
+    m_services <|-- r_service
+
+    add_service .right.> e_service : <<precedes>>
+    add_service .left.> r_service : <<precedes>>
+
+    add_branch .right.> r_branch  : <<precedes>>
+    add_branch .left.> e_branch_info  : <<precedes>>
+    Barber -- v_appointments
+}
+
+@enduml
