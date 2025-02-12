@@ -6,17 +6,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import tsvetkov.daniil.Main;
+import tsvetkov.daniil.groombooker.dto.UserInfoDTO;
 import tsvetkov.daniil.groombooker.entity.UserInfo;
-import tsvetkov.daniil.groombooker.exception.InvalidEmailException;
 import tsvetkov.daniil.groombooker.service.UserInfoService;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 @SpringBootTest(classes = Main.class)
-//TODO не откатывает данные
+@Transactional
+@Rollback
 @DisplayName("Запись UserInfo")
 public class UserInfoServiceTest {
 
@@ -24,44 +24,71 @@ public class UserInfoServiceTest {
     private UserInfoService userInfoService;
     private UserInfo userInfo;
 
-    @BeforeEach
-    public void init()
-    {
-        final String firstName = "Алексей";
-        final String middleName = "Васильков";
-        final String phoneNumber = "+79996754530";
-        final String email = "client@gmail.com";
+    static final String firstName = "testFirstName";
+    static final String lastName = "testMiddleName";
+    static final String phoneNumber = "+79996754530";
+    static final String email = "test_client@gmail.com";
 
-        this.userInfo = new UserInfo(firstName, middleName, phoneNumber, email);
+    @BeforeEach
+    public void init() {
+        this.userInfo = new UserInfo(firstName, lastName, phoneNumber, email);
     }
 
     @Test
-    @Rollback
-    @Transactional
-    @DisplayName("Корректные данные")
-    public void insertCorrectUserInfo() {
+    @DisplayName("Save UserInfo")
+    public void saveUserInfoTest() {
         userInfoService.save(userInfo);
 
-        Assertions.assertNotNull(userInfo.getUserInfoId());
-        Assertions.assertTrue(userInfoService.findById(userInfo.getUserInfoId()).isPresent());
+        Assertions.assertNotNull(userInfo.getId());
+        Assertions.assertNotNull(userInfoService.getById(userInfo.getId()));
 
-        UserInfo savedUserInfo = userInfoService.findById(userInfo.getUserInfoId()).get();
+        UserInfo savedUserInfo = userInfoService.getById(userInfo.getId());
 
-        Assertions.assertEquals(userInfo.getFirstName(), savedUserInfo.getFirstName());
-        Assertions.assertEquals(userInfo.getMiddleName(), savedUserInfo.getMiddleName());
-        Assertions.assertEquals(userInfo.getPhoneNumber(), savedUserInfo.getPhoneNumber());
-        Assertions.assertEquals(userInfo.getEmail(), savedUserInfo.getEmail());
+        Assertions.assertEquals(firstName, savedUserInfo.getFirstName());
+        Assertions.assertEquals(lastName, savedUserInfo.getLastName());
+        Assertions.assertEquals(phoneNumber, savedUserInfo.getPhoneNumber());
+        Assertions.assertEquals(email, savedUserInfo.getEmail());
     }
 
+    @Test
+    @DisplayName("Update UserInfo")
+    public void updateUserInfo() {
+        userInfoService.save(userInfo);
+
+        final int id = userInfo.getId();
+
+        final String newFirstName = "Aaron";
+        final String newMiddleName = "Paul";
+        final String newEmail = "test@localhost.com";
+        final String newPhoneNumber = "+79990007788";
+
+        UserInfoDTO userInfoDTO = UserInfoDTO.builder()
+                .userInfoId(id)
+                .firstName(newFirstName)
+                .lastName(newMiddleName)
+                .email(newEmail)
+                .phoneNumber(newPhoneNumber)
+                .build();
+
+        userInfoService.update(userInfoDTO);
+
+        UserInfo updatedUserInfo = userInfoService.getById(id);
+        Assertions.assertEquals(newFirstName, updatedUserInfo.getFirstName());
+        Assertions.assertEquals(newMiddleName, updatedUserInfo.getLastName());
+        Assertions.assertEquals(newPhoneNumber, updatedUserInfo.getPhoneNumber());
+        Assertions.assertEquals(newEmail, updatedUserInfo.getEmail());
+    }
 
     @Test
-    @DisplayName("Некорректный email")
-    public void insertIncorrectEmail() {
-        userInfo.setEmail("@incorrect.com");
-        assertThrows(InvalidEmailException.class, () -> {
-            userInfoService.save(userInfo);
-        });
+    @DisplayName("Delete UserInfo")
+    public void removeUserInfo() {
+        userInfoService.save(userInfo);
+        Assertions.assertNotNull(userInfoService.getById(userInfo.getId()));
 
+        Assertions.assertTrue(userInfoService.deleteById(userInfo.getId()));
+
+        Assertions.assertThrows(JpaObjectRetrievalFailureException.class,
+                () -> userInfoService.getById(userInfo.getId()));
     }
 }
 

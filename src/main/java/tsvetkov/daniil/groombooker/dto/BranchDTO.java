@@ -1,21 +1,14 @@
-package tsvetkov.daniil.groombooker.entity;
+package tsvetkov.daniil.groombooker.dto;
 
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
 
-@Entity
-@Table(name = "branches")
 @Data
 @Builder
-public class Branch {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "branch_id")
+public class BranchDTO {
     private Integer id;
 
     private String address;
@@ -27,6 +20,4 @@ public class Branch {
     private BigDecimal latitude;
 
     private BigDecimal longitude;
-
 }
-

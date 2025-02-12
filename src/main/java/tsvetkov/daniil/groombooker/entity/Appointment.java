@@ -1,6 +1,7 @@
 package tsvetkov.daniil.groombooker.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Data
 @Entity
+@Builder
 @Table(name = "appointments")
 public class Appointment {
 

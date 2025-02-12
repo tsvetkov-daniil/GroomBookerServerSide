@@ -1,15 +1,10 @@
 package tsvetkov.daniil.groombooker.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
-@NoArgsConstructor
-@RequiredArgsConstructor
 @Table(name = "app_users")
 public class AppUser {
     @Id
@@ -24,8 +19,19 @@ public class AppUser {
     @NonNull
     private String password;
 
+    @NonNull
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
+    public AppUser(@NonNull UserInfo userInfo, @NonNull String password, @NonNull Role role) {
+        this.userInfo = userInfo;
+        this.password = password;
+        this.role = role;
+    }
+
+    public AppUser(int id, @NonNull UserInfo userInfo, @NonNull String password, @NonNull Role role) {
+        this(userInfo,password,role);
+        this.id = id;
+    }
 }

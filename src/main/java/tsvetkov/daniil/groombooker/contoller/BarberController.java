@@ -42,10 +42,10 @@ public class BarberController {
         if (optionalBarber.isPresent()) {
 
             Barber barber = optionalBarber.get();
-            UserInfo userInfo = barber.getUserId().getUserInfoId();
-            userInfo.setFirstName(barberDetails.getUserId().getUserInfoId().getFirstName());
-            userInfo.setPhoneNumber(barberDetails.getUserId().getUserInfoId().getPhoneNumber());
-            userInfo.setEmail(barberDetails.getEmail());
+            UserInfo userInfo = barber.getAppUser().getUserInfo();
+            userInfo.setFirstName(barberDetails.getAppUser().getUserInfo().getFirstName());
+            userInfo.setPhoneNumber(barberDetails.getAppUser().getUserInfo().getPhoneNumber());
+//            userInfo.setEmail(barberDetails.getEmail());
 
             Barber updatedBarber = barberRepository.save(barber);
             return ResponseEntity.ok(updatedBarber);
